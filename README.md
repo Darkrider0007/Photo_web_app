@@ -1,8 +1,49 @@
-# React + Vite
+# Photo Web App Project
+![Logo](/public/logo.png)
+## Features
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The Photo Web App is a project built using Vite React, Tailwind CSS, Firebase for the backend, and React Hook Form. It provides the following features:
 
-Currently, two official plugins are available:
+- **User Authentication:**
+  - Users can register, login, and logout securely.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Photo Management:**
+  - Upload, update, and delete photos along with their titles.
+
+## Technologies Used
+
+- **Frontend:**
+  - Vite React
+  - Tailwind CSS
+
+- **Backend:**
+  - Firebase
+
+- **Form Handling:**
+  - React Hook Form
+
+## Screenshots
+
+![Screenshot 1](/Screenshot/unloggedin.png)
+*Home Page Login in required*
+
+![Screenshot 2](/Screenshot/login.png)
+*Login Page*
+
+![Screenshot 3](/Screenshot/register.png)
+*Register Page*
+
+![Screenshot 4](/Screenshot/loggedin.png)
+*Home Page Loggedin*
+
+![Screenshot 5](/Screenshot/upload.png)
+*Register Page*
+
+![Screenshot 6](/Screenshot/upload.png)
+*Upload Photo Page*
+
+![Screenshot 7](/Screenshot/view-photos.png)
+*View Photos Page*
+
+![Screenshot 8](/Screenshot/photo_des.png)
+*Photo Description Page*
