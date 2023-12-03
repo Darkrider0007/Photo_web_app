@@ -22,6 +22,10 @@ The Photo Web App is a project built using Vite React, Tailwind CSS, Firebase fo
 - **Form Handling:**
   - React Hook Form
 
+## Test Login email and Password
+Email : ``` one@gmail.com```
+Password: ```123456```
+
 ## Screenshots
 
 ![Screenshot 1](/Screenshot/unloggedin.png)
