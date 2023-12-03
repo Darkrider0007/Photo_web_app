@@ -8,87 +8,94 @@ import { useForm } from "react-hook-form";
 import Loader from "../Loader";
 
 function DisplayPhoto({ name }) {
-	const [photo, setPhoto] = useState({});
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+  const [photo, setPhoto] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-	const { register, handleSubmit } = useForm();
-	const [selectedImage, setSelectedImage] = useState(null);
-	const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
-	const uid = useSelector((state) => state.auth.userData?.uid);
-	const update = async (data) => {
-		try {
-			setLoading(true);
-			await databaseService.deleteItem(uid, name);
+  const uid = useSelector((state) => state.auth.userData?.uid);
 
-			await databaseService.uploadFile(uid, String(data.title), data.image[0]);
+  const update = async (data) => {
+    try {
+      setLoading(true);
+      await databaseService.deleteItem(uid, name);
+      await databaseService.uploadFile(uid, String(data.title), data.image[0]);
+      navigate(`/`);
+    } catch (error) {
+      console.error("Error updating photo:", error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-			navigate(`/`);
-		} catch (error) {
-			setLoading(false);
-			console.error("Error updating photo:", error);
-		}
-	};
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setSelectedImage(URL.createObjectURL(file));
+    }
+  };
 
-	const handleImageChange = (e) => {
-		if (e.target.files.length > 0) {
-			const file = e.target.files[0];
-			console.log(file.name);
-			setSelectedImage(URL.createObjectURL(file));
-		}
-	};
+  const handleDelete = () => {
+    setLoading(true);
+    databaseService
+      .deleteItem(uid, name)
+      .then(() => {
+        console.log("File deleted successfully");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-	const handleDelete = () => {
-		setLoading(true);
-		databaseService
-			.deleteItem(uid, name)
-			.then(() => {
-				console.log("File deleted successfully");
-				navigate("/");
-			})
-			.catch((error) => {
-				console.error(error);
-				setLoading(false);
-			});
-	};
-	useEffect(() => {
-		setLoading(true);
-		const data = {
-			url: "",
-			title: "",
-			time: "",
-		};
-		const promises = [
-			databaseService.downloadUrlFromName(uid, name),
-			databaseService.metadata(uid, name),
-		];
-		Promise.all(promises)
-			.then(([url, metadata]) => {
-				data.url = url;
-				data.title = metadata.customMetadata.title;
-				data.time = metadata.customMetadata.time;
-				setPhoto(data);
-				setLoading(false);
-			})
-			.catch((error) => {
-				console.error(error);
-				setLoading(false);
-				setError(true);
-			});
-	}, [uid]);
+  useEffect(() => {
+    setLoading(true);
+    const data = {
+      url: "",
+      title: "",
+      time: "",
+    };
+    const promises = [
+      databaseService.downloadUrlFromName(uid, name),
+      databaseService.metadata(uid, name),
+    ];
 
-	if (loading) {
-		return <Loader />;
-	}
-	if (!error) {
-		return (
-			<div className="flex flex-col justify-center items-center h-screen">
-				<h1 className="text-4xl font-bold">Error Occurs</h1>
-				<h1 className="text-4xl font-bold">Reload the Page</h1>
-			</div>
-		);
-	}
+    Promise.all(promises)
+      .then(([url, metadata]) => {
+        data.url = url;
+        data.title = metadata.customMetadata.title;
+        data.time = metadata.customMetadata.time;
+        setPhoto(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [uid]);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error || !photo.url) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <h1 className="text-4xl font-bold">Error Occurs</h1>
+        <h1 className="text-4xl font-bold">Reload the Page</h1>
+      </div>
+    );
+  }
 	return (
 		<div className="p-4">
 			<div className="flex flex-col justify-center items-center m-4">
