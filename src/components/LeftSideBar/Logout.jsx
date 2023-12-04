@@ -3,13 +3,16 @@ import React from 'react'
 import authService from '../../firebase/auth.firebase'
 import { useDispatch } from 'react-redux'
 import { authLogout } from '../../store/authSlice'
+import { useNavigate } from 'react-router-dom'
 
 function Logout() {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const handleLogout = async () => {
         try {
             await authService.logout()
             dispatch(authLogout())
+            navigate('/')
         }
         catch (error) {
             console.log(error)

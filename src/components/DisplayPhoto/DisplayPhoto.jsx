@@ -17,6 +17,11 @@ function DisplayPhoto({ name }) {
   const navigate = useNavigate();
 
   const uid = useSelector((state) => state.auth.userData?.uid);
+  const authStatus = useSelector((state) => state.auth.status)
+  const navigation = useNavigate()
+  if(!authStatus){
+    navigation('/')
+  }
 
   const update = async (data) => {
     try {
